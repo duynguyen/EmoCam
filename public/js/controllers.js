@@ -29,25 +29,25 @@ myControllers.controller("bodyController", [
 	}
 ]).controller("noteVisController", [
 	"$scope", "chartService", function ($scope, chartService) {
+		$scope.chartType = -1;
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
 		function displayNote(note) {
 			var noteListItem = $(".note-list-item");
-			$("#noteVis div").text(note.content);
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
+			chartService.drawChart($scope.chartType,note.id);
 		}
 
-		function getChartID() {
-			return 1; // TODO to be replaced with concrete Id
+		function getNoteID() {
+			return 0; // TODO to be replaced with concrete Id
 		}
 
 		$scope.showChart = function(chartType) {
-			var chartId = getChartID(),
-				output = chartService.drawChart(chartType, chartId);
-			// $("#chartContainer").empty();
-			// $("#chartContainer").append(output);
+			var noteId = getNoteID();
+			chartService.drawChart(chartType, noteId);
+			$scope.chartType = chartType;
 		};
 	}
 ]).controller("noteSearchBoxController", [

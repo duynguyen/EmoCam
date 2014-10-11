@@ -10,7 +10,6 @@ myServices.factory("chartService", [
 				emotion = data[index].name;
 				emap[emotions.indexOf(emotion)]++;
 			}
-			// console.log(emap);
 			$('#chartContainer').highcharts({
 		        chart: { polar: true, type: 'area' },
 		        title: {
@@ -60,7 +59,6 @@ myServices.factory("chartService", [
 				emoidx = emotions.indexOf(emotion);
 				series[emotion].push([data[index].ts, emoidx]);
 			}
-			console.log(series.angry);
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
@@ -115,7 +113,6 @@ myServices.factory("chartService", [
 				emotion = data[index].name;
 				series[emotion].push([data[index].ts, 1]);
 			}
-			console.log(series.angry);
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
@@ -162,7 +159,7 @@ myServices.factory("chartService", [
 			return element;	
 		}
 
-		function getChartData(chartId) {
+		function getChartData(noteId) {
 			// TODO: generate mocked data for now, to be replaced by concrete data later
 			var from = 0, to = 500,
 				data = [], index, recorded, emotion;
@@ -188,15 +185,11 @@ myServices.factory("chartService", [
 			polarChart: polarChart,
 			timeline: timeline,
 			combinedTimeline: combinedTimeline,
-			drawChart: function(chartType, chartId, options) {
-				var data = getChartData(chartId),
-					output;
+			drawChart: function(chartType, noteId, options) {
+				var data = getChartData(noteId);
 				if (chartType === 1) {
-					console.log("timeline");
 					timeline(data);
 				} else if (chartType === 2) {
-					// polar chart
-					console.log("polar");
 					polarChart(data);
 				} else if (chartType === 3) {
 					combinedTimeline(data);
@@ -204,7 +197,6 @@ myServices.factory("chartService", [
 					// chart type not supported
 					console.log("Unsupported chart type");
 				}
-				return output;
 			}
 		};
 	}
