@@ -1,4 +1,5 @@
 var myControllers = angular.module("myControllers", []);
+myControllers.factory("dataService", dataService);
 myControllers.factory("chartService", chartService);
 myControllers.factory("restService", restService);
 myControllers.controller("bodyController", [
@@ -25,8 +26,8 @@ myControllers.controller("bodyController", [
 			$scope.$parent.$broadcast("show-note", note);
 		};
 	}
-]).controller("noteVisController", [
-	"$scope", "chartService", "restService", function ($scope, chartService, restService) {
+]).controller("noteVisController", ["$scope", "chartService", "restService", "dataService", 
+	function ($scope, chartService, restService, dataService) {
 		$scope.chartType = -1;
 		$scope.noteContent = null;
 		$scope.$on("show-note", function(event, data) {
@@ -57,6 +58,7 @@ myControllers.controller("bodyController", [
 		function getNoteContentAndDraw(chartType, noteGuid) {
 			restService.getNoteContent(noteGuid, function(data) {
 				console.log("Note content ready");
+				data = dataService.getChartDataFromContent(data);
 				chartService.drawChart(chartType, data);
 			});
 		}

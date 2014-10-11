@@ -1,5 +1,5 @@
 var restService = [
-	function (argument) {
+	function () {
 
 		function getNoteMetadata(callback) {
 			$.getJSON("/evernote", function(data) {
