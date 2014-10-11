@@ -2,6 +2,7 @@ var myServices = angular.module("myServices", []);
 
 myServices.factory("chartService", [
 	function () {
+		var emotions = ["neutral", "happy", "sad", "surprised", "angry"]
 		
 		function polarChart(data, options) {
 			$('#chartContainer').highcharts({
@@ -9,45 +10,39 @@ myServices.factory("chartService", [
 		            polar: true,
 		            type: 'line'
 		        },
-
 		        title: {
-		            text: 'Emotion Polar Chart',
+		            text: 'Budget vs spending',
 		            x: -80
 		        },
-
 		        pane: {
 		            size: '80%'
 		        },
-
 		        xAxis: {
-		            categories: data.emotions,
+		            categories: emotions,
 		            tickmarkPlacement: 'on',
 		            lineWidth: 0
 		        },
-
 		        yAxis: {
 		            gridLineInterpolation: 'polygon',
 		            lineWidth: 0,
 		            min: 0
 		        },
-
 		        tooltip: {
 		            shared: true,
 		            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
 		        },
-
 		        legend: {
 		            align: 'right',
 		            verticalAlign: 'top',
 		            y: 70,
 		            layout: 'vertical'
 		        },
-
 		        series: [{
 		            name: 'Allocated Budget',
 		            data: [43000, 19000, 60000, 35000, 17000],
 		            pointPlacement: 'on'
 		        }]
+
 		    });
 		}
 
@@ -123,7 +118,6 @@ myServices.factory("chartService", [
 		function getChartData(chartId) {
 			// TODO: generate mocked data for now, to be replaced by concrete data later
 			var from = 0, to = 1000,
-				emotions = ["neutral", "happy", "sad", "surprised", "angry"], 
 				data = [], index, recorded, emotion;
 			for (index=from;index<to;index++) {
 				recorded = Math.random();
@@ -131,8 +125,7 @@ myServices.factory("chartService", [
 					emotion = emotions[parseInt(Math.random() * emotions.length)];
 					data.push({
 						ts: index,
-						name: emotion,
-						emotions: emotions 
+						name: emotion
 					});
 				}
 			}
