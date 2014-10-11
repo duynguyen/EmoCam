@@ -2,8 +2,13 @@ var myServices = angular.module("myServices", []);
 
 myServices.factory("chartService", [
 	function () {
-		var emotions = ["neutral", "happy", "sad", "surprised", "angry"]
-		
+		var emotions = ["neutral", "happy", "sad", "surprised", "angry"],
+			happy = 'url(/image/happy.png)',
+			sad = 'url(/image/sad.png)',
+			angry = 'url(/image/angry.png)',
+			surprised = 'url(/image/surprised.png)',
+			neutral = 'url(/image/neutral.png)';
+
 		function polarChart(data) {
 			var emotion, index, emap = [0,0,0,0,0];
 			for (index=0;index<data.length;++index) {
@@ -84,19 +89,34 @@ myServices.factory("chartService", [
 
 		        series: [{
 		            name: 'angry',
-		            data: series.angry
-		        }, {
-		            name: 'neutral',
-		            data: series.neutral
+		            data: series.angry,
+		            marker: {
+		                symbol: angry
+		            }
 		        }, {
 		            name: 'sad',
-		            data: series.sad
+		            data: series.sad,
+		            marker: {
+		                symbol: sad
+		            }
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral,
+		            marker: {
+		                symbol: neutral
+		            }
 		        }, {
 		            name: 'surprised',
-		            data: series.surprised
+		            data: series.surprised,
+		            marker: {
+		                symbol: surprised
+		            }
 		        }, {
 		            name: 'happy',
-		            data: series.happy
+		            data: series.happy,
+		            marker: {
+		                symbol: happy
+		            }
 		        }]
 		    });
 		}
@@ -137,19 +157,34 @@ myServices.factory("chartService", [
 
 		        series: [{
 		            name: 'angry',
-		            data: series.angry
-		        }, {
-		            name: 'neutral',
-		            data: series.neutral
+		            data: series.angry,
+		            marker: {
+		                symbol: angry
+		            }
 		        }, {
 		            name: 'sad',
-		            data: series.sad
+		            data: series.sad,
+		            marker: {
+		                symbol: sad
+		            }
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral,
+		            marker: {
+		                symbol: neutral
+		            }
 		        }, {
 		            name: 'surprised',
-		            data: series.surprised
+		            data: series.surprised,
+		            marker: {
+		                symbol: surprised
+		            }
 		        }, {
 		            name: 'happy',
-		            data: series.happy
+		            data: series.happy,
+		            marker: {
+		                symbol: happy
+		            }
 		        }]
 		    });
 		}
