@@ -12,7 +12,7 @@ var session	       = require('express-session');
 var db = require('./config/db');
 
 var port = process.env.PORT || 8080; // set our port
-mongoose.connect(db.url);
+// mongoose.connect(db.url);
 
 // get all data/stuff of the body (POST) parameters
 app.use(bodyParser.json()); // parse application/json
