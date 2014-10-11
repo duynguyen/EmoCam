@@ -31,4 +31,8 @@ myControllers.controller("bodyController", [
 			$("#noteVis div").text(note.content);
 		}
 	}
+]).controller("noteSearchBoxController", [
+	"$scope", function($scope) {
+
+	}
 ]);
