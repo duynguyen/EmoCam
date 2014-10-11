@@ -74,6 +74,19 @@ module.exports = function(app, VidNote) {
     }
   });
 
+  app.post('/evernote', function(req, res) {
+    var note = new VidNote();     // create a new instance of the Nerd model
+    note.name = req.body.name;  // set the nerd's name (comes from the request)
+
+    // save the nerd and check for errors
+    note.save(function(err) {
+      if (err)
+        res.send(err);
+
+      res.json({ message: 'Note created!', status: 'ok' });
+    });
+  });
+
   // OAuth with Evernote
   app.get('/evernote/oauth', function(req, res) {
     var client = new Evernote.Client({
