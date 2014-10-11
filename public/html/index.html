@@ -2,7 +2,7 @@
 <html ng-app="theApp">
 	<head>
 		<title>The App</title>
-		<link rel="stylesheet" type="text/css" href="/public/css/main.css">
+		<link rel="stylesheet" type="text/css" href="/css/main.css">
 	</head>
 	<body ng-controller="bodyController">
 		<div id="noteList" ng-controller="noteListController">
@@ -13,7 +13,9 @@
 			</ul>
 		</div>
 		<div id="noteVis" ng-controller="noteVisController">
-			{{notes[0].content}}
+			<div>
+				{{notes[0].content}}
+			</div>
 		</div>
 		<!-- libraries -->
 		<script src="/libs/jquery/dist/jquery.min.js"></script>

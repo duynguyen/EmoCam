@@ -1,3 +1,7 @@
 html {
   font-size: 20px;
 }
+html body #noteList {
+  float: left;
+  width: 25%;
+}

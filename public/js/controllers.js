@@ -31,7 +31,7 @@ myControllers.controller("bodyController", [
 			displayNote(data);
 		});
 		function displayNote(note) {
-			$("#noteVis").text(note.content);
+			$("#noteVis div").text(note.content);
 		}
 	}
 ]);
