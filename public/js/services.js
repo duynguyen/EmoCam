@@ -48,20 +48,36 @@ myServices.factory("chartService", [
 		}
 
 		function timeline(data) {
+			var series = {
+				angry: [], 
+				neutral: [], 
+				happy: [], 
+				sad: [], 
+				surprised: []
+			}, emotion, index, emoidx;
+			for (index=0;index<data.length;++index) {
+				emotion = data[index].name;
+				emoidx = emotions.indexOf(emotion);
+				series[emotion].push([data[index].ts, emoidx]);
+			}
+			console.log(series.angry);
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
-		        subtitle: { text: 'How emotion changes with time' },
+		        subtitle: { text: 'How each emotion changes with time' },
 		        xAxis: {
-		            type: 'datetime',
-		            title: { text: 'Date' }
+		            type: 'linear',
+		            title: { text: 'Timestamp' }
 		        },
 		        yAxis: {
-		            title: { text: 'Snow depth (m)' },
 		            min: 0,
-		            max: 2,
+		            max: 4,
 		            minTickInterval: 1,
-		            gridLineWidth: 0
+		            gridLineWidth: 0,
+		            categories: emotions,
+		            title: {
+		            	text: "Emotion"
+		            }
 		        },
 		        tooltip: {
 		            headerFormat: '<b>{series.name}</b><br>',
@@ -69,29 +85,74 @@ myServices.factory("chartService", [
 		        },
 
 		        series: [{
-		            name: 'Winter 2007-2008',
-		            data: [
-		                [Date.UTC(1970,  9, 27), 1 ],
-		                [Date.UTC(1970, 10, 10), 1 ],
-		                [Date.UTC(1970, 10, 18), 1 ],
-		                [Date.UTC(1970, 11,  2), 1 ],
-		                [Date.UTC(1971,  1, 10), 1 ],
-		                [Date.UTC(1971,  1, 18), 1 ],
-		                [Date.UTC(1971,  3,  6), 1 ],
-		                [Date.UTC(1971,  3, 13), 1 ],
-		                [Date.UTC(1971,  4,  3), 1 ],
-		                [Date.UTC(1971,  4, 26), 1 ],
-		            ]
+		            name: 'angry',
+		            data: series.angry
 		        }, {
-		            name: 'Winter 2007-2008',
-		            data: [
-		                [Date.UTC(1971,  0,  1), 1 ],
-		                [Date.UTC(1971,  0,  8), 1 ],
-		                [Date.UTC(1971,  0, 12), 1 ],
-		                [Date.UTC(1971,  0, 27), 1 ],
-		                [Date.UTC(1971,  5,  9), 1 ],
-		                [Date.UTC(1971,  5, 12), 1 ]
-		            ]
+		            name: 'neutral',
+		            data: series.neutral
+		        }, {
+		            name: 'sad',
+		            data: series.sad
+		        }, {
+		            name: 'surprised',
+		            data: series.surprised
+		        }, {
+		            name: 'happy',
+		            data: series.happy
+		        }]
+		    });
+		}
+
+		function combinedTimeline(data) {
+			var series = {
+				angry: [], 
+				neutral: [], 
+				happy: [], 
+				sad: [], 
+				surprised: []
+			}, emotion, index, emoidx;
+			for (index=0;index<data.length;++index) {
+				emotion = data[index].name;
+				series[emotion].push([data[index].ts, 1]);
+			}
+			console.log(series.angry);
+			$('#chartContainer').highcharts({
+	        	chart: { type: 'scatter' },
+		        title: { text: 'Emotion timeline' },
+		        subtitle: { text: 'How all emotions change with time' },
+		        xAxis: {
+		            type: 'linear',
+		            title: { text: 'Timestamp' }
+		        },
+		        yAxis: {
+		            min: 0,
+		            max: 2,
+		            minTickInterval: 1,
+		            gridLineWidth: 0,
+		            title: {
+		            	text: "Emotion"
+		            }
+		        },
+		        tooltip: {
+		            headerFormat: '<b>{series.name}</b><br>',
+		            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+		        },
+
+		        series: [{
+		            name: 'angry',
+		            data: series.angry
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral
+		        }, {
+		            name: 'sad',
+		            data: series.sad
+		        }, {
+		            name: 'surprised',
+		            data: series.surprised
+		        }, {
+		            name: 'happy',
+		            data: series.happy
 		        }]
 		    });
 		}
@@ -103,12 +164,17 @@ myServices.factory("chartService", [
 
 		function getChartData(chartId) {
 			// TODO: generate mocked data for now, to be replaced by concrete data later
-			var from = 0, to = 1000,
+			var from = 0, to = 500,
 				data = [], index, recorded, emotion;
 			for (index=from;index<to;index++) {
 				recorded = Math.random();
-				if (recorded < 0.2) {
+				if (recorded < 0.15) {
 					emotion = emotions[parseInt(Math.random() * emotions.length)];
+					if (data.length > 0) {
+						if (emotion === data[data.length-1].name) {
+							continue;
+						}
+					}
 					data.push({
 						ts: index,
 						name: emotion
@@ -121,16 +187,19 @@ myServices.factory("chartService", [
 		return {
 			polarChart: polarChart,
 			timeline: timeline,
+			combinedTimeline: combinedTimeline,
 			drawChart: function(chartType, chartId, options) {
 				var data = getChartData(chartId),
 					output;
 				if (chartType === 1) {
 					console.log("timeline");
-					timeline(data, options);
+					timeline(data);
 				} else if (chartType === 2) {
 					// polar chart
 					console.log("polar");
-					polarChart(data, options);
+					polarChart(data);
+				} else if (chartType === 3) {
+					combinedTimeline(data);
 				} else {
 					// chart type not supported
 					console.log("Unsupported chart type");
