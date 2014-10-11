@@ -1,6 +1,4 @@
-var myServices = angular.module("myServices", []);
-
-myServices.factory("chartService", [
+var chartService = [
 	function () {
 		var emotions = ["neutral", "happy", "sad", "surprised", "angry"],
 			happy = 'url(/image/happy.png)',
@@ -235,4 +233,4 @@ myServices.factory("chartService", [
 			}
 		};
 	}
-]);
+];

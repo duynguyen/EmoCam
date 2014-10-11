@@ -1,17 +1,21 @@
 var myControllers = angular.module("myControllers", []);
+myControllers.factory("chartService", chartService);
+myControllers.factory("restService", restService);
 myControllers.controller("bodyController", [
-	"$scope", function($scope) {
+	"$scope", "restService", function($scope, restService) {
 		$scope.notes = [];
-		$.getJSON("/evernote", function(data) {
+		
+		restService.getNoteMetadata(function(data) {
 			$.each(data, function(index, value) {
 				value.id = index;
 			});
 			$scope.notes = data;
 			$scope.$digest();
 			$(document).ready(function () {
-				var element = $("#noteVis .dropdown-menu > li > a").get(0);
-				element = $(element);
-				element.trigger("click");
+				var element = $("#noteVis .dropdown-menu > li > a").get(0),
+					noteItem = $(".note-list-item").get(0);
+				$(element).trigger("click");
+				$(noteItem).addClass("active");
 			});
 		});
 	}
@@ -22,7 +26,7 @@ myControllers.controller("bodyController", [
 		};
 	}
 ]).controller("noteVisController", [
-	"$scope", "chartService", function ($scope, chartService) {
+	"$scope", "chartService", "restService", function ($scope, chartService, restService) {
 		$scope.chartType = -1;
 		$scope.noteContent = null;
 		$scope.$on("show-note", function(event, data) {
@@ -51,12 +55,10 @@ myControllers.controller("bodyController", [
 		}
 
 		function getNoteContentAndDraw(chartType, noteGuid) {
-			if (noteGuid) {
-				$.getJSON("/evernote/content/" + noteGuid, function(data) {
-					console.log("Note content ready");
-					chartService.drawChart(chartType, data);
-				});	
-			}
+			restService.getNoteContent(noteGuid, function(data) {
+				console.log("Note content ready");
+				chartService.drawChart(chartType, data);
+			});
 		}
 
 		$scope.showChart = function(chartType) {
@@ -65,14 +67,4 @@ myControllers.controller("bodyController", [
 			getNoteContentAndDraw($scope.chartType, noteGuid);
 		};
 	}
-]).controller("noteSearchBoxController", [
-	"$scope", function($scope) {
-
-	}
-]).run(function() {
-	$(document).ready(function() {
-		var selectedItem = $(".note-list-item").get(0);
-			selectedItem = $(selectedItem);
-			selectedItem.addClass("active");
-	});
-});
+]);

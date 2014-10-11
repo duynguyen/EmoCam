@@ -25,7 +25,7 @@
 		</nav>
 		<div class="container-fluid">
 			<div class="left-side row col-xs-12 col-md-3">
-				<div id="noteSearchBox" class="input-group row col-xs-12" ng-controller="noteSearchBoxController">
+				<div id="noteSearchBox" class="input-group row col-xs-12">
 					<input ng-model="query" type="text" class="form-control" placeholder="Search your note">
 				</div>	
 				<ul id="noteList" class="list-group row col-xs-12" ng-controller="noteListController">
@@ -63,9 +63,10 @@
 
 
 		<!-- app's code -->
+		<script src="/js/services/chartService.js"></script>
+		<script src="/js/services/restService.js"></script>
 		<script src="/js/controllers.js"></script>
 		<script src="/js/directives.js"></script>
-		<script src="/js/services.js"></script>
 		<script src="/js/filters.js"></script>
 		<script src="/js/app.js"></script>
 	</body>
