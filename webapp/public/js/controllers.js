@@ -1,25 +1,19 @@
-var mockedNotes = [],
-	index = 0;
-for (;index<9;++index) {
-	mockedNotes.push({
-		id: index,
-		title: "This is note " + (index+1),
-		url: "#",
-		content: "This is where the visualization for note " + (index+1) + " appears."
-	});
-}
-mockedNotes.push({
-	id: 10,
-	title: "ZZWW " + (index+1),
-	url: "#",
-	content: "This is where the visualization for note " + (index+1) + " appears."
-});
-
-
 var myControllers = angular.module("myControllers", []);
 myControllers.controller("bodyController", [
 	"$scope", function($scope) {
-		$scope.notes = mockedNotes;
+		$scope.notes = [];
+		$.getJSON("/evernote", function(data) {
+			$.each(data, function(index, value) {
+				value.id = index;
+			});
+			$scope.notes = data;
+			$scope.$digest();
+			$(document).ready(function () {
+				var element = $("#noteVis .dropdown-menu > li > a").get(0);
+				element = $(element);
+				element.trigger("click");
+			});
+		});
 	}
 ]).controller("noteListController", [
 	"$scope", function ($scope) {
