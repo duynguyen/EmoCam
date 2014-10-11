@@ -4,19 +4,22 @@
 		<title>The App</title>
 		<link rel="stylesheet" type="text/css" href="/public/css/main.css">
 	</head>
-	<body>
+	<body ng-controller="bodyController">
 		<div id="noteList" ng-controller="noteListController">
 			<ul ng-repeat="note in notes">
 				<ol>
-					<a href="{{note.url}}">{{note.title}}</a>
+					<a href="{{note.url}}" ng-click="showNote(note)">{{note.title}}</a>
 				</ol>
 			</ul>
 		</div>
 		<div id="noteVis" ng-controller="noteVisController">
-			Hallo
+			{{notes[0].content}}
 		</div>
-		
+		<!-- libraries -->
+		<script src="/libs/jquery/dist/jquery.min.js"></script>
 		<script src="/libs/angular/angular.min.js"></script>
+
+		<!-- app's code -->
 		<script src="/js/controllers.js"></script>
 		<script src="/js/directives.js"></script>
 		<script src="/js/services.js"></script>
