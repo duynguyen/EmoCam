@@ -28,7 +28,7 @@ myControllers.controller("bodyController", [
 		};
 	}
 ]).controller("noteVisController", [
-	"$scope", function ($scope) {
+	"$scope", "chartService", function ($scope, chartService) {
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
@@ -38,6 +38,12 @@ myControllers.controller("bodyController", [
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
 		}
+
+		$scope.showChart = function(chartType) {
+			var output = chartService.getChart(chartType);
+			$("#chartContainer").empty();
+			$("#chartContainer").append(output);
+		};
 	}
 ]).controller("noteSearchBoxController", [
 	"$scope", function($scope) {

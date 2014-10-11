@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 
 	// one task to rule them all!
   	grunt.registerTask('default', [
-  		'sass',
+  		// 'sass',
   		'jshint',
   	]);
 };

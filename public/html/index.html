@@ -35,8 +35,18 @@
 				</ul>
 			</div>
 			<div id="noteVis" class="row col-xs-12 col-md-8" ng-controller="noteVisController">
-				<div>
-					{{notes[0].content}}
+				<div class="dropdown">
+					<button class="btn btn-default dropdown-toggle" type="button" id="visualization-dropdown" data-toggle="dropdown">
+					Select a Visualization
+					<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="visualization-dropdown">
+						<li role="presentation"><a role="menuitem" ng-click="showChart(1)" tabindex="-1" href="#">Timeline</a></li>
+						<li role="presentation"><a role="menuitem" ng-click="showChart(2)" tabindex="-1" href="#">Polar Chart</a></li>
+					</ul>
+				</div>
+				<div id="chartContainer">
+					<ng-polar-chart></ng-polar-chart>
 				</div>
 			</div>
 		</div>
@@ -44,6 +54,7 @@
 		<!-- libraries -->
 
 		<script src="/libs/jquery/dist/jquery.min.js"></script>
+		<script src="/libs/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="/libs/angular/angular.min.js"></script>
 
 		<!-- app's code -->
