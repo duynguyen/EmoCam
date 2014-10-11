@@ -45,9 +45,7 @@ myControllers.controller("bodyController", [
 
 		$scope.showChart = function(chartType) {
 			var chartId = getChartID(),
-				output = chartService.drawChart(chartType, chartId, {
-
-				});
+				output = chartService.drawChart(chartType, chartId);
 			// $("#chartContainer").empty();
 			// $("#chartContainer").append(output);
 		};

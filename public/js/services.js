@@ -4,19 +4,20 @@ myServices.factory("chartService", [
 	function () {
 		var emotions = ["neutral", "happy", "sad", "surprised", "angry"]
 		
-		function polarChart(data, options) {
+		function polarChart(data) {
+			var emotion, index, emap = [0,0,0,0,0];
+			for (index=0;index<data.length;++index) {
+				emotion = data[index].name;
+				emap[emotions.indexOf(emotion)]++;
+			}
+			// console.log(emap);
 			$('#chartContainer').highcharts({
-		        chart: {
-		            polar: true,
-		            type: 'line'
-		        },
+		        chart: { polar: true, type: 'area' },
 		        title: {
-		            text: 'Budget vs spending',
+		            text: 'Emotion Polar Chart',
 		            x: -80
 		        },
-		        pane: {
-		            size: '80%'
-		        },
+		        pane: { size: '80%' },
 		        xAxis: {
 		            categories: emotions,
 		            tickmarkPlacement: 'on',
@@ -38,15 +39,15 @@ myServices.factory("chartService", [
 		            layout: 'vertical'
 		        },
 		        series: [{
-		            name: 'Allocated Budget',
-		            data: [43000, 19000, 60000, 35000, 17000],
+		            name: 'Emotion count',
+		            data: emap,
 		            pointPlacement: 'on'
 		        }]
 
 		    });
 		}
 
-		function timeline(data, options) {
+		function timeline(data) {
 			$('#chartContainer').highcharts({
 	        	chart: {
 		            type: 'spline'
