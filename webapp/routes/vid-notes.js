@@ -44,6 +44,9 @@ module.exports = function(app, VidNote) {
         if(err) {
           res.json({message : err});
         }
+        if(!noteMetadataList) {
+          res.json({message : "Note list is not found."});
+        }
         var notes = noteMetadataList.notes;
         for(var i in notes) {
           myNotes.push(notes[i]);
@@ -63,7 +66,7 @@ module.exports = function(app, VidNote) {
         sandbox: config.SANDBOX
       });
       var noteStore = client.getNoteStore();
-      
+
       noteStore.getNoteContent(req.params.guid, function(err, noteContent) {
         if(err) {
           res.json({message : err});
