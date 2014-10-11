@@ -4,16 +4,53 @@ myServices.factory("chartService", [
 	function () {
 		
 		function polarChart(data, options) {
-			var element = $("<ng-polar-chart>").attr({
-
+			$(function () {
+			    $('#chartContainer').highcharts({
+			        chart: {
+			            polar: true
+			        },
+			        title: {
+			            text: 'Highcharts Polar Chart'
+			        },
+			        pane: {
+			            startAngle: 0,
+			            endAngle: 360
+			        },
+			        xAxis: {
+			            tickInterval: 45,
+			            min: 0,
+			            max: 360,
+			            labels: {
+			                formatter: function () {
+			                    return this.value + '°';
+			                }
+			            }
+			        },
+			        yAxis: {
+			            min: 0
+			        },
+			        plotOptions: {
+			            series: {
+			                pointStart: 0,
+			                pointInterval: 45
+			            },
+			            column: {
+			                pointPadding: 0,
+			                groupPadding: 0
+			            }
+			        },
+			        series: [{
+			            type: 'column',
+			            name: 'Column',
+			            data: [8, 7, 6, 5, 4, 3, 2, 1],
+			            pointPlacement: 'between'
+			        }]
+			    });
 			});
-			return element;
 		}
 
 		function timeline(data, options) {
-			var element = $("<ng-timeline>").attr({
-
-			});
+			var element = $("<ng-timeline>").attr(options);
 			return element;
 		}
 
@@ -23,13 +60,40 @@ myServices.factory("chartService", [
 		}
 
 		function getChartData(chartId) {
-			// TODO: mocked data for now, to be replaced by concrete data later
+			// TODO: generate mocked data for now, to be replaced by concrete data later
+			var from = 0, to = 1000,
+				emotions = [{
+						key: 0,
+						name: "neutral"
+					}, {
+						key: 1,
+						name: "happy"
+					}, {
+						key: 2,
+						name: "sad"
+					}, {
+						key: 3,
+						name: "surprised"
+					}, {
+						key: 4,
+						name: "angry"
+				}], data = [], index, recorded, emotion;
+			for (index=from;index<to;index++) {
+				recorded = Math.random();
+				if (recorded < 0.2) {
+					emotion = emotions[parseInt(Math.random() * emotions.length)];
+					data.push({
+						ts: index,
+						name: emotion.namme
+					});
+				}
+			}
 		}
 
 		return {
 			polarChart: polarChart,
 			timeline: timeline,
-			getChart: function(chartType, chartId, options) {
+			drawChart: function(chartType, chartId, options) {
 				var data = getChartData(chartId),
 					output;
 				if (chartType === 1) {
@@ -38,7 +102,7 @@ myServices.factory("chartService", [
 				} else if (chartType === 2) {
 					// polar chart
 					console.log("polar");
-					output = polarChart(data, options);
+					polarChart(data, options);
 				} else {
 					// chart type not supported
 					console.log("Unsupported chart type");

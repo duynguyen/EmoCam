@@ -44,12 +44,12 @@ myControllers.controller("bodyController", [
 		}
 
 		$scope.showChart = function(chartType) {
-			var data = getChartID(),
-				output = chartService.getChart(chartType, charId, {
+			var chartId = getChartID(),
+				output = chartService.drawChart(chartType, chartId, {
 
 				});
-			$("#chartContainer").empty();
-			$("#chartContainer").append(output);
+			// $("#chartContainer").empty();
+			// $("#chartContainer").append(output);
 		};
 	}
 ]).controller("noteSearchBoxController", [
