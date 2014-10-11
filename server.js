@@ -1,7 +1,7 @@
 // modules =================================================
 var express        = require('express');
 var app            = express();
-var mongoose       = require('mongoose');
+// var mongoose       = require('mongoose');
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
 var session	       = require('express-session');
@@ -13,7 +13,7 @@ var cookieParser   = require('cookie-parser');
 var db = require('./config/db');
 
 var port = process.env.PORT || 8080; // set our port
-mongoose.connect(db.url);
+// mongoose.connect(db.url);
 
 // get all data/stuff of the body (POST) parameters
 app.use(bodyParser.json()); // parse application/json
