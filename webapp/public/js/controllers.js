@@ -24,24 +24,45 @@ myControllers.controller("bodyController", [
 ]).controller("noteVisController", [
 	"$scope", "chartService", function ($scope, chartService) {
 		$scope.chartType = -1;
+		$scope.noteContent = null;
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
+
 		function displayNote(note) {
 			var noteListItem = $(".note-list-item");
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
-			chartService.drawChart($scope.chartType,note.id);
+			getNoteContentAndDraw($scope.chartType,note.guid);
 		}
 
-		function getNoteID() {
-			return 0; // TODO to be replaced with concrete Id
+		function getNoteGUID() {
+			var noteListItem = $(".note-list-item"),
+				noteGuid;
+			if ($scope.$parent.notes.length > 0) {
+				noteGuid = $scope.$parent.notes[0].guid;
+			}
+			$.each(noteListItem, function (index, value) {
+				if ($(value).hasClass("active")) {
+					noteGuid = $scope.$parent.notes[index].guid;
+				}
+			});
+			return noteGuid; // TODO to be replaced with concrete Id
+		}
+
+		function getNoteContentAndDraw(chartType, noteGuid) {
+			if (noteGuid) {
+				$.getJSON("/evernote/content/" + noteGuid, function(data) {
+					console.log("Note content ready");
+					chartService.drawChart(chartType, data);
+				});	
+			}
 		}
 
 		$scope.showChart = function(chartType) {
-			var noteId = getNoteID();
-			chartService.drawChart(chartType, noteId);
+			var noteGuid = getNoteGUID();
 			$scope.chartType = chartType;
+			getNoteContentAndDraw($scope.chartType, noteGuid);
 		};
 	}
 ]).controller("noteSearchBoxController", [

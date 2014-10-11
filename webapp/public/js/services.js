@@ -194,8 +194,8 @@ myServices.factory("chartService", [
 			return element;	
 		}
 
-		function getChartData(noteId) {
-			// TODO: generate mocked data for now, to be replaced by concrete data later
+		function getChartData(content) {
+			// mock content data for now
 			var from = 0, to = 500,
 				data = [], index, recorded, emotion;
 			for (index=from;index<to;index++) {
@@ -220,8 +220,8 @@ myServices.factory("chartService", [
 			polarChart: polarChart,
 			timeline: timeline,
 			combinedTimeline: combinedTimeline,
-			drawChart: function(chartType, noteId, options) {
-				var data = getChartData(noteId);
+			drawChart: function(chartType, content) {
+				var data = getChartData(content);
 				if (chartType === 1) {
 					timeline(data);
 				} else if (chartType === 2) {
