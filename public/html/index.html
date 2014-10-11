@@ -25,7 +25,6 @@
 			</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
-
 		<div class="container-fluid">
 			<div id="noteSearchBox" class="input-group row col-xs-offset-1 col-xs-10 col-md-offset-3 col-md-6" ng-controller="noteSearchBoxController">
 				<span class="input-group-addon">Search</span>
@@ -33,6 +32,7 @@
 			</div>
 
 			<div id="noteList" class="list-group row col-xs-12 col-md-3 " ng-controller="noteListController">
+				<h4>Top 10 Recent Notes</h4>
 				<div class="list-group">
 					<a href="#" ng-click="showNote(note)" 
 					class="col-xs-12 list-group-item note-list-item" ng-repeat="note in notes">
