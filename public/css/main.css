@@ -1,7 +1,7 @@
 html {
   font-size: 20px;
 }
-html body #noteList {
-  float: left;
-  width: 25%;
+
+.note-list-item {
+  text-align: center;
 }

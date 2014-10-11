@@ -26,19 +26,22 @@
 			</div><!-- /.container-fluid -->
 		</nav>
 
-
-		<div id="noteList" ng-controller="noteListController">
-			<ul ng-repeat="note in notes">
-				<ol>
-					<a href="{{note.url}}" ng-click="showNote(note)">{{note.title}}</a>
-				</ol>
-			</ul>
-		</div>
-		<div id="noteVis" ng-controller="noteVisController">
-			<div>
-				{{notes[0].content}}
+		<div class="container-fluid">
+			<div id="noteList" class="list-group row col-xs-12 col-md-3 " ng-controller="noteListController">
+				<div class="list-group">
+					<a href="#" ng-click="showNote(note)" 
+					class="col-xs-12 list-group-item note-list-item" ng-repeat="note in notes">
+				    	{{note.title}}
+				  	</a>
+				</div>
+			</div>
+			<div id="noteVis" class="row col-xs-12 col-md-8" ng-controller="noteVisController">
+				<div>
+					{{notes[0].content}}
+				</div>
 			</div>
 		</div>
+		
 		<!-- libraries -->
 
 		<script src="/libs/jquery/dist/jquery.min.js"></script>

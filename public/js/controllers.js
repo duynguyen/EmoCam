@@ -1,23 +1,20 @@
+var mockedNotes = [],
+	index = 0;
+for (;index<10;++index) {
+	mockedNotes.push({
+		id: index,
+		title: "This is note " + (index+1),
+		url: "#",
+		content: "There is a lot of text here. Note " + index + ". Hello World."
+	});
+}
+
+
 var myControllers = angular.module("myControllers", []);
 myControllers.controller("bodyController", [
 	"$scope", function($scope) {
-		$scope.notes = [ 
-			{
-				title: "note 1",
-				url: "#",
-				content: "This is the first note"
-			},
-			{
-				title: "note 2",
-				url: "#",
-				content: "This is the 2nd note"
-			},
-			{
-				title: "note 3",
-				url: "#",
-				content: "This is the 3rd note"
-			},
-		];
+		$scope.notes = mockedNotes;
+		$scope.selected = 0;
 	}
 ]).controller("noteListController", [
 	"$scope", function ($scope) {
