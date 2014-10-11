@@ -32,7 +32,7 @@ webapp/node_modules
 
 
 # Sass cache
-.sass-cache
+webapp/.sass-cache
 
 # bower_components
 webapp/public/libs
