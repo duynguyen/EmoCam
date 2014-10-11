@@ -1,5 +1,5 @@
 # Logs
-logs
+webapp/logs
 *.log
 
 # Runtime data
@@ -13,6 +13,9 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 
+# On Mac OS
+.DS_Store
+
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
@@ -22,7 +25,7 @@ build/Release
 # Dependency directory
 # Commenting this out is preferred by some people, see
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
-node_modules
+webapp/node_modules
 
 # Users Environment Variables
 .lock-wscript
@@ -32,4 +35,7 @@ node_modules
 .sass-cache
 
 # bower_components
-public/libs
+webapp/public/libs
+
+# evernote config
+webapp/config-evernote.json
