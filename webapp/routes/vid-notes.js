@@ -4,6 +4,8 @@ var parser = require('./parser');
 var config = require('../config-evernote.json');
 var callbackUrl = "http://localhost:8080/evernote/oauth_callback";
 
+var developerToken = "S=s1:U=8fa58:E=15058bc41cf:C=149010b1580:P=1cd:A=en-devtoken:V=2:H=6638a4d7f918382c2e67ad91fdd4810b";
+
 module.exports = function(app, VidNote) {
   app.use(function(req, res, next) {
     // do logging
@@ -16,93 +18,76 @@ module.exports = function(app, VidNote) {
   // handle things like api calls
   // authentication routes
   app.get('/evernote', function(req, res) {
-    if(req.session.oauthAccessToken) {
-      var token = req.session.oauthAccessToken;
-      var client = new Evernote.Client({
-        token: token,
-        sandbox: config.SANDBOX
-      });
-      var noteStore = client.getNoteStore();
-      var myNotes = [];
-      var filter = new Evernote.NoteFilter;
-      filter.ascending = false;
+    var client = new Evernote.Client({token: developerToken});
+    var noteStore = client.getNoteStore();
+    var myNotes = [];
+    var filter = new Evernote.NoteFilter;
+    filter.ascending = false;
 
-      var rspec = new Evernote.NotesMetadataResultSpec;
-      rspec.includeTitle = true;
-      rspec.includeContentLength = true;
-      rspec.includeCreated = true;
-      rspec.includeUpdated = true;
-      rspec.includeDeleted = true;
-      rspec.includeUpdateSequenceNum = true;
-      rspec.includeNotebookGuid = true;
-      rspec.includeTagGuids = true;
-      rspec.includeAttributes = true;
-      rspec.includeLargestResourceMime = true;
-      rspec.includeLargestResourceSize = true;
+    var rspec = new Evernote.NotesMetadataResultSpec;
+    rspec.includeTitle = true;
+    rspec.includeContentLength = true;
+    rspec.includeCreated = true;
+    rspec.includeUpdated = true;
+    rspec.includeDeleted = true;
+    rspec.includeUpdateSequenceNum = true;
+    rspec.includeNotebookGuid = true;
+    rspec.includeTagGuids = true;
+    rspec.includeAttributes = true;
+    rspec.includeLargestResourceMime = true;
+    rspec.includeLargestResourceSize = true;
 
-      noteStore.findNotesMetadata(filter, 0, 100, rspec, function(err, noteMetadataList) {
-        if(err) {
-          res.json({message : err});
-        }
-        if(!noteMetadataList) {
-          res.json({message : "Note list is not found."});
-        }
-        var notes = noteMetadataList.notes;
-        for(var i in notes) {
-          myNotes.push(notes[i]);
-        }
-        res.json(myNotes);
-      });
-    } else {
-      res.redirect('/evernote/oauth');
-    }
+    noteStore.findNotesMetadata(filter, 0, 100, rspec, function(err, noteMetadataList) {
+      if(err) {
+        res.json({message : err});
+      }
+      if(!noteMetadataList) {
+        res.json({message : "Note list is not found."});
+      }
+      var notes = noteMetadataList.notes;
+      for(var i in notes) {
+        myNotes.push(notes[i]);
+      }
+      res.json(myNotes);
+    });
   });
 
   app.get('/evernote/content/:guid', function(req, res) {
-    if(req.session.oauthAccessToken) {
-      var token = req.session.oauthAccessToken;
-      var client = new Evernote.Client({
-        token: token,
-        sandbox: config.SANDBOX
-      });
-      var noteStore = client.getNoteStore();
+    var client = new Evernote.Client({token: developerToken});
+    var noteStore = client.getNoteStore();
 
-      noteStore.getNoteContent(req.params.guid, function(err, noteContent) {
-        if(err) {
-          res.json({message : err});
-        }
-        res.json(noteContent);
-      });
-    } else {
-      res.redirect('/evernote/oauth');
-    }
+    noteStore.getNoteContent(req.params.guid, function(err, noteContent) {
+      if(err) {
+        res.json({message : err});
+      }
+      res.json(noteContent);
+    });
+
   });
 
   app.post('/evernote', function(req, res) {
+    var client = new Evernote.Client({token: developerToken});
+    var noteStore = client.getNoteStore();
     var noteContent = parser.parseArrayToNote(JSON.parse(req.body.content));  // set the nerd's name (comes from the request)
     var newNote = new Evernote.Note;
-    console.log(req.body.title);
-    console.log(noteContent);
     newNote.title = req.body.title;
     newNote.content = noteContent;
-    // save the nerd and check for errors
-    if(req.session.oauthAccessToken) {
-      var token = req.session.oauthAccessToken;
-      var client = new Evernote.Client({
-        token: token,
-        sandbox: config.SANDBOX
-      });
-      var noteStore = client.getNoteStore();
-      
-      noteStore.createNote(newNote, function(err, newNoteCreated) {
-        if(err) {
-          res.json({message : err});
-        }
-        res.json(newNoteCreated);
-      });
-    } else {
-      res.json({message: 'unauthorized', status: 'ok'});
-    }
+    noteStore.createNote(newNote, function(err, newNoteCreated) {
+      if(err) {
+        res.json({message : err});
+      }
+      var dkey = "visable";
+      var dval = "true";
+      // noteStore.setNoteApplicationDataEntry(newNoteCreated.guid, dkey, dval);
+      // newNoteCreated = noteStore.updateNote(newNoteCreated);
+      // fs.readFile(req.files.noteVideo.path, function (err, data) {
+      //   var newPath = __dirname + "/public/uploads/" + newNoteCreated.guid;
+      //   fs.writeFile(newPath, data, function (err) {
+      //     res.json({message: "Can not handle uploaded file."});
+      //   });
+      // });
+      res.json(newNoteCreated);
+    });
   });
 
   // OAuth with Evernote
