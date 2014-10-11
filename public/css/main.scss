@@ -2,12 +2,18 @@ html {
 	font-size: 20px;
 	body {
 
-		#noteList {
-			float: left;
-			width: 25%;
-		}
-		#noteVis {
-			
-		}
 	}
+}
+
+#noteSearchBox {
+	margin-bottom: 10px;
+}
+
+#noteList {
+	margin-left:1px;
+	margin-right:1px;
+}
+
+.note-list-item {
+	text-align: center;
 }

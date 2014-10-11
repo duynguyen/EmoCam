@@ -1,23 +1,19 @@
+var mockedNotes = [],
+	index = 0;
+for (;index<10;++index) {
+	mockedNotes.push({
+		id: index,
+		title: "This is note " + (index+1),
+		url: "#",
+		content: "This is where the visualization for note " + (index+1) + " appears."
+	});
+}
+
+
 var myControllers = angular.module("myControllers", []);
 myControllers.controller("bodyController", [
 	"$scope", function($scope) {
-		$scope.notes = [ 
-			{
-				title: "note 1",
-				url: "#",
-				content: "This is the first note"
-			},
-			{
-				title: "note 2",
-				url: "#",
-				content: "This is the 2nd note"
-			},
-			{
-				title: "note 3",
-				url: "#",
-				content: "This is the 3rd note"
-			},
-		];
+		$scope.notes = mockedNotes;
 	}
 ]).controller("noteListController", [
 	"$scope", function ($scope) {
@@ -26,12 +22,25 @@ myControllers.controller("bodyController", [
 		};
 	}
 ]).controller("noteVisController", [
-	"$scope", "$document", function ($scope, $document) {
+	"$scope", function ($scope) {
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
 		function displayNote(note) {
+			var noteListItem = $(".note-list-item");
 			$("#noteVis div").text(note.content);
+			noteListItem.removeClass("active");
+			$(noteListItem.get(note.id)).addClass("active");
 		}
 	}
-]);
+]).controller("noteSearchBoxController", [
+	"$scope", function($scope) {
+
+	}
+]).run(function() {
+	$(document).ready(function() {
+		var selectedItem = $(".note-list-item").get(0);
+			selectedItem = $(selectedItem);
+			selectedItem.addClass("active");
+	});
+});
