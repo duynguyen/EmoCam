@@ -39,8 +39,15 @@ myControllers.controller("bodyController", [
 			$(noteListItem.get(note.id)).addClass("active");
 		}
 
+		function getChartID() {
+			return 1; // TODO to be replaced with concrete Id
+		}
+
 		$scope.showChart = function(chartType) {
-			var output = chartService.getChart(chartType);
+			var data = getChartID(),
+				output = chartService.getChart(chartType, charId, {
+
+				});
 			$("#chartContainer").empty();
 			$("#chartContainer").append(output);
 		};

@@ -22,11 +22,16 @@ myServices.factory("chartService", [
 			return element;	
 		}
 
+		function getChartData(chartId) {
+			// TODO: mocked data for now, to be replaced by concrete data later
+		}
+
 		return {
 			polarChart: polarChart,
 			timeline: timeline,
-			getChart: function(chartType, data, options) {
-				var output;
+			getChart: function(chartType, chartId, options) {
+				var data = getChartData(chartId),
+					output;
 				if (chartType === 1) {
 					console.log("timeline");
 					output = timeline(data, options);
