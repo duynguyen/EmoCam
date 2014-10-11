@@ -22,7 +22,7 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
 
 // models ==============================================
-var Nerd = require('./app/models/vid-note');
+var VidNote = require('./app/models/vid-note');
 
 // routes / controllers (TODO refactor) ==================================================
 require('./app/routes')(app, VidNote); // configure our routes
