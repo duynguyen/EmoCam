@@ -1,4 +1,5 @@
 var Evernote = require('evernote').Evernote;
+var parser = require('./parser');
 
 var config = require('../config-evernote.json');
 var callbackUrl = "http://localhost:8080/evernote/oauth_callback";
@@ -75,16 +76,30 @@ module.exports = function(app, VidNote) {
   });
 
   app.post('/evernote', function(req, res) {
-    var note = new VidNote();     // create a new instance of the Nerd model
-    note.name = req.body.name;  // set the nerd's name (comes from the request)
-
+    var noteContent = parser.parseArrayToNote(JSON.parse(req.body.content));  // set the nerd's name (comes from the request)
+    var newNote = new Evernote.Note;
+    console.log(req.body.title);
+    console.log(noteContent);
+    newNote.title = req.body.title;
+    newNote.content = noteContent;
     // save the nerd and check for errors
-    note.save(function(err) {
-      if (err)
-        res.send(err);
-
-      res.json({ message: 'Note created!', status: 'ok' });
-    });
+    if(req.session.oauthAccessToken) {
+      var token = req.session.oauthAccessToken;
+      var client = new Evernote.Client({
+        token: token,
+        sandbox: config.SANDBOX
+      });
+      var noteStore = client.getNoteStore();
+      
+      noteStore.createNote(newNote, function(err, newNoteCreated) {
+        if(err) {
+          res.json({message : err});
+        }
+        res.json(newNoteCreated);
+      });
+    } else {
+      res.json({message: 'unauthorized', status: 'ok'});
+    }
   });
 
   // OAuth with Evernote
