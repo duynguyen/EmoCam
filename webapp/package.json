@@ -8,6 +8,7 @@
     "method-override": "~2.0.2",
     "express-session": "*",
     "cookie-parser": "*",
+    "multer": "*",
     "evernote": "*"
   },
   "devDependencies": {
