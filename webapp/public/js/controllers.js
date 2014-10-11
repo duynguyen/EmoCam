@@ -1,25 +1,24 @@
-var mockedNotes = [],
-	index = 0;
-for (;index<9;++index) {
-	mockedNotes.push({
-		id: index,
-		title: "This is note " + (index+1),
-		url: "#",
-		content: "This is where the visualization for note " + (index+1) + " appears."
-	});
-}
-mockedNotes.push({
-	id: 10,
-	title: "ZZWW " + (index+1),
-	url: "#",
-	content: "This is where the visualization for note " + (index+1) + " appears."
-});
-
-
 var myControllers = angular.module("myControllers", []);
+myControllers.factory("dataService", dataService);
+myControllers.factory("chartService", chartService);
+myControllers.factory("restService", restService);
 myControllers.controller("bodyController", [
-	"$scope", function($scope) {
-		$scope.notes = mockedNotes;
+	"$scope", "restService", function($scope, restService) {
+		$scope.notes = [];
+		
+		restService.getNoteMetadata(function(data) {
+			$.each(data, function(index, value) {
+				value.id = index;
+			});
+			$scope.notes = data;
+			$scope.$digest();
+			$(document).ready(function () {
+				var element = $("#noteVis .dropdown-menu > li > a").get(0),
+					noteItem = $(".note-list-item").get(0);
+				$(element).trigger("click");
+				$(noteItem).addClass("active");
+			});
+		});
 	}
 ]).controller("noteListController", [
 	"$scope", function ($scope) {
@@ -27,37 +26,47 @@ myControllers.controller("bodyController", [
 			$scope.$parent.$broadcast("show-note", note);
 		};
 	}
-]).controller("noteVisController", [
-	"$scope", "chartService", function ($scope, chartService) {
+]).controller("noteVisController", ["$scope", "chartService", "restService", "dataService", 
+	function ($scope, chartService, restService, dataService) {
 		$scope.chartType = -1;
+		$scope.noteContent = null;
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
+
 		function displayNote(note) {
 			var noteListItem = $(".note-list-item");
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
-			chartService.drawChart($scope.chartType,note.id);
+			getNoteContentAndDraw($scope.chartType,note.guid);
 		}
 
-		function getNoteID() {
-			return 0; // TODO to be replaced with concrete Id
+		function getNoteGUID() {
+			var noteListItem = $(".note-list-item"),
+				noteGuid;
+			if ($scope.$parent.notes.length > 0) {
+				noteGuid = $scope.$parent.notes[0].guid;
+			}
+			$.each(noteListItem, function (index, value) {
+				if ($(value).hasClass("active")) {
+					noteGuid = $scope.$parent.notes[index].guid;
+				}
+			});
+			return noteGuid; // TODO to be replaced with concrete Id
+		}
+
+		function getNoteContentAndDraw(chartType, noteGuid) {
+			restService.getNoteContent(noteGuid, function(data) {
+				console.log("Note content ready");
+				data = dataService.getChartDataFromContent(data);
+				chartService.drawChart(chartType, data);
+			});
 		}
 
 		$scope.showChart = function(chartType) {
-			var noteId = getNoteID();
-			chartService.drawChart(chartType, noteId);
+			var noteGuid = getNoteGUID();
 			$scope.chartType = chartType;
+			getNoteContentAndDraw($scope.chartType, noteGuid);
 		};
 	}
-]).controller("noteSearchBoxController", [
-	"$scope", function($scope) {
-
-	}
-]).run(function() {
-	$(document).ready(function() {
-		var selectedItem = $(".note-list-item").get(0);
-			selectedItem = $(selectedItem);
-			selectedItem.addClass("active");
-	});
-});
+]);

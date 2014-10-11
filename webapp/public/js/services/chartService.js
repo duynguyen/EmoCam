@@ -1,6 +1,4 @@
-var myServices = angular.module("myServices", []);
-
-myServices.factory("chartService", [
+var chartService = [
 	function () {
 		var emotions = ["neutral", "happy", "sad", "surprised", "angry"],
 			happy = 'url(/image/happy.png)',
@@ -88,6 +86,24 @@ myServices.factory("chartService", [
 		        },
 
 		        series: [{
+		            name: 'happy',
+		            data: series.happy,
+		            marker: {
+		                symbol: happy
+		            }
+		        }, {
+		            name: 'surprised',
+		            data: series.surprised,
+		            marker: {
+		                symbol: surprised
+		            }
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral,
+		            marker: {
+		                symbol: neutral
+		            }
+		        }, {
 		            name: 'angry',
 		            data: series.angry,
 		            marker: {
@@ -98,24 +114,6 @@ myServices.factory("chartService", [
 		            data: series.sad,
 		            marker: {
 		                symbol: sad
-		            }
-		        }, {
-		            name: 'neutral',
-		            data: series.neutral,
-		            marker: {
-		                symbol: neutral
-		            }
-		        }, {
-		            name: 'surprised',
-		            data: series.surprised,
-		            marker: {
-		                symbol: surprised
-		            }
-		        }, {
-		            name: 'happy',
-		            data: series.happy,
-		            marker: {
-		                symbol: happy
 		            }
 		        }]
 		    });
@@ -194,34 +192,11 @@ myServices.factory("chartService", [
 			return element;	
 		}
 
-		function getChartData(noteId) {
-			// TODO: generate mocked data for now, to be replaced by concrete data later
-			var from = 0, to = 500,
-				data = [], index, recorded, emotion;
-			for (index=from;index<to;index++) {
-				recorded = Math.random();
-				if (recorded < 0.15) {
-					emotion = emotions[parseInt(Math.random() * emotions.length)];
-					if (data.length > 0) {
-						if (emotion === data[data.length-1].name) {
-							continue;
-						}
-					}
-					data.push({
-						ts: index,
-						name: emotion
-					});
-				}
-			}
-			return data;
-		}
-
 		return {
 			polarChart: polarChart,
 			timeline: timeline,
 			combinedTimeline: combinedTimeline,
-			drawChart: function(chartType, noteId, options) {
-				var data = getChartData(noteId);
+			drawChart: function(chartType, data) {
 				if (chartType === 1) {
 					timeline(data);
 				} else if (chartType === 2) {
@@ -235,4 +210,4 @@ myServices.factory("chartService", [
 			}
 		};
 	}
-]);
+];

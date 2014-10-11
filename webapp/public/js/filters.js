@@ -1,1 +1,6 @@
-var myFilters = angular.module("myFilters", []);
+var myFilters = angular.module("myFilters", []).
+	filter('filterTitle', function() {
+		return function(input, title) {
+			return "";
+		};
+});
