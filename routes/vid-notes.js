@@ -25,7 +25,7 @@ module.exports = function(app, VidNote) {
       var myNotes = [];
       var filter = new Evernote.NoteFilter;
       filter.ascending = false;
-       
+
       var rspec = new Evernote.NotesMetadataResultSpec;
       rspec.includeTitle = true;
       rspec.includeContentLength = true;
@@ -41,13 +41,33 @@ module.exports = function(app, VidNote) {
 
       noteStore.findNotesMetadata(filter, 0, 100, rspec, function(err, noteMetadataList) {
         if(err) {
-          console.log(err);
+          res.json({"message" : err});
         }
         var notes = noteMetadataList.notes;
         for(var i in notes) {
           myNotes.push(notes[i]);
         }
         res.json(myNotes);
+      });
+    } else {
+      res.redirect('/evernote/oauth');
+    }
+  });
+
+  app.get('/evernote/:guid', function(req, res) {
+    if(req.session.oauthAccessToken) {
+      var token = req.session.oauthAccessToken;
+      var client = new Evernote.Client({
+        token: token,
+        sandbox: config.SANDBOX
+      });
+      var noteStore = client.getNoteStore();
+      
+      noteStore.getNoteContent(req.params.guid, function(err, noteContent) {
+        if(err) {
+          res.json({"message" : err});
+        }
+        res.json(noteContent);
       });
     } else {
       res.redirect('/evernote/oauth');
