@@ -5,13 +5,13 @@ html {
 	}
 }
 
-#noteSearchBox {
-	margin-bottom: 10px;
-}
-
-#noteList {
+.left-side {
 	margin-left:1px;
 	margin-right:1px;
+}
+
+#noteSearchBox {
+	margin-bottom: 10px;
 }
 
 .note-list-item {

@@ -8,37 +8,31 @@
 	<body ng-controller="bodyController">
 		<nav class="navbar navbar-static-top navbar-inverse" role="navigation">
 			<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">The App</a>
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">The App</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<p class="navbar-text navbar-left">Signed in as <a href="#" class="navbar-link">TODO</a></p>
+					<button type="button" class="btn btn-default navbar-btn navbar-right">Sign out</button>
+				</div>
 			</div>
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<p class="navbar-text navbar-left">Signed in as <a href="#" class="navbar-link">TODO</a></p>
-				<button type="button" class="btn btn-default navbar-btn navbar-right">Sign out</button>
-			</div><!-- /.navbar-collapse -->
-			</div><!-- /.container-fluid -->
 		</nav>
 		<div class="container-fluid">
-			<div id="noteSearchBox" class="input-group row col-xs-offset-1 col-xs-10 col-md-offset-3 col-md-6" ng-controller="noteSearchBoxController">
-				<span class="input-group-addon">Search</span>
-				<input type="text" class="form-control" placeholder="Search your note">
-			</div>
-
-			<div id="noteList" class="list-group row col-xs-12 col-md-3 " ng-controller="noteListController">
-				<h4>Top 10 Recent Notes</h4>
-				<div class="list-group">
-					<a href="#" ng-click="showNote(note)" 
-					class="col-xs-12 list-group-item note-list-item" ng-repeat="note in notes">
+			<div class="left-side row col-xs-12 col-md-3">
+				<div id="noteSearchBox" class="input-group row col-xs-12" ng-controller="noteSearchBoxController">
+					<input ng-model="query" type="text" class="form-control" placeholder="Search your note">
+				</div>	
+				<ul id="noteList" class="list-group row col-xs-12" ng-controller="noteListController">
+					<li href="#" ng-click="showNote(note)" class="col-xs-12 list-group-item note-list-item" ng-repeat="note in notes | filter:query">
 				    	{{note.title}}
-				  	</a>
-				</div>
+				  	</li>
+				</ul>
 			</div>
 			<div id="noteVis" class="row col-xs-12 col-md-8" ng-controller="noteVisController">
 				<div>
