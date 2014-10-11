@@ -41,7 +41,7 @@ module.exports = function(app, VidNote) {
 
       noteStore.findNotesMetadata(filter, 0, 100, rspec, function(err, noteMetadataList) {
         if(err) {
-          res.json({"message" : err});
+          res.json({message : err});
         }
         var notes = noteMetadataList.notes;
         for(var i in notes) {
@@ -54,7 +54,7 @@ module.exports = function(app, VidNote) {
     }
   });
 
-  app.get('/evernote/:guid', function(req, res) {
+  app.get('/evernote/content/:guid', function(req, res) {
     if(req.session.oauthAccessToken) {
       var token = req.session.oauthAccessToken;
       var client = new Evernote.Client({
@@ -65,7 +65,7 @@ module.exports = function(app, VidNote) {
       
       noteStore.getNoteContent(req.params.guid, function(err, noteContent) {
         if(err) {
-          res.json({"message" : err});
+          res.json({message : err});
         }
         res.json(noteContent);
       });
@@ -86,8 +86,7 @@ module.exports = function(app, VidNote) {
       if(error) {
         req.session.error = JSON.stringify(error);
         res.json(req.session.error);
-      }
-      else {
+      } else {
         // store the tokens in the session
         req.session.oauthToken = oauthToken;
         req.session.oauthTokenSecret = oauthTokenSecret;
