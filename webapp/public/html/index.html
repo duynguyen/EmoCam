@@ -30,7 +30,7 @@
 				</div>	
 				<ul id="noteList" class="list-group row col-xs-12" ng-controller="noteListController">
 					<a href="#"><li ng-click="showNote(note)" class="col-xs-12 list-group-item note-list-item" ng-repeat="note in notes | filter:{title:query}">
-				    	<h3>{{note.title}}</h3>
+				    	<h4>{{note.title}}</h4>
 				  	</li></a>
 				</ul>
 			</div>

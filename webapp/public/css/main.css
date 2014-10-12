@@ -13,4 +13,6 @@ html {
 
 .note-list-item {
   text-align: center;
+  padding-top: 0;
+  padding-bottom: 0;
 }
