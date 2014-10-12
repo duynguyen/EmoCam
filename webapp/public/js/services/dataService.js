@@ -40,7 +40,7 @@ var dataService = [
 					var em = parseInt(Math.random() * 4);
 					data.push({
 						ts: index,
-						name: em
+						name: emotions[em]
 					});
 				}
 			}
