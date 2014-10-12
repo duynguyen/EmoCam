@@ -1,14 +1,13 @@
 var chartService = [
 	function () {
-		var emotions = ["Neutral", "Happy", "Sad", "Surprised", "Angry"],
+		var emotions = ["Neutral", "Happy", "Sad", "Angry"],
 			happy = 'url(/image/happy.png)',
 			sad = 'url(/image/sad.png)',
 			angry = 'url(/image/angry.png)',
-			surprised = 'url(/image/surprised.png)',
 			neutral = 'url(/image/neutral.png)';
 
 		function polarChart(data) {
-			var emotion, index, emap = [0,0,0,0,0];
+			var emotion, index, emap = [0,0,0,0];
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name;
 				emap[emotions.indexOf(emotion)]++;
@@ -19,7 +18,7 @@ var chartService = [
 		            text: 'Emotion Polar Chart',
 		            x: -80
 		        },
-		        pane: { size: '100%' },
+		        pane: { size: '80%' },
 		        xAxis: {
 		            categories: emotions,
 		            tickmarkPlacement: 'on',
@@ -55,11 +54,13 @@ var chartService = [
 				angry: [], 
 				neutral: [], 
 				happy: [], 
-				sad: [], 
-				surprised: []
+				sad: []
 			}, emotion, index, emoidx,  maxX, minX, ts;
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name;
+				if (!series[emotion.toLowerCase()]) {
+					continue;
+				}
 				emoidx = emotions.indexOf(emotion);
 				ts = data[index].ts;
 				series[emotion.toLowerCase()].push([ts, emoidx]);
@@ -84,7 +85,7 @@ var chartService = [
 		        },
 		        yAxis: {
 		            min: 0,
-		            max: 4,
+		            max: 3,
 		            minTickInterval: 1,
 		            gridLineWidth: 0,
 		            categories: emotions,
@@ -102,12 +103,6 @@ var chartService = [
 		            data: series.happy,
 		            marker: {
 		                symbol: happy
-		            }
-		        }, {
-		            name: 'surprised',
-		            data: series.surprised,
-		            marker: {
-		                symbol: surprised
 		            }
 		        }, {
 		            name: 'neutral',
@@ -136,11 +131,13 @@ var chartService = [
 				angry: [], 
 				neutral: [], 
 				happy: [], 
-				sad: [], 
-				surprised: []
+				sad: []
 			}, emotion, index, emoidx, minX, maxX, ts;
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name.toLowerCase();
+				if (!series[emotion]) {
+					continue;
+				}
 				ts = data[index].ts;
 				series[emotion].push([ts, 1]);
 				if (!minX || ts < minX) {
@@ -185,12 +182,6 @@ var chartService = [
 		            data: series.happy,
 		            marker: {
 		                symbol: happy
-		            }
-		        }, {
-		            name: 'surprised',
-		            data: series.surprised,
-		            marker: {
-		                symbol: surprised
 		            }
 		        }, {
 		            name: 'neutral',

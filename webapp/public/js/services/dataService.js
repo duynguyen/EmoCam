@@ -1,6 +1,6 @@
 var dataService = [
 	function () {
-		var emotions = ["Neutral", "Happy", "Sad", "Surprised", "Angry"];
+		var emotions = ["Neutral", "Happy", "Sad", "Angry"];
 
 		function parseStringToTS(str) {
 			var parts = str.split(":"),
