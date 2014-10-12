@@ -19,7 +19,7 @@ var chartService = [
 		            text: 'Emotion Polar Chart',
 		            x: -80
 		        },
-		        pane: { size: '80%' },
+		        pane: { size: '100%' },
 		        xAxis: {
 		            categories: emotions,
 		            tickmarkPlacement: 'on',
@@ -32,7 +32,7 @@ var chartService = [
 		        },
 		        tooltip: {
 		            shared: true,
-		            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+		            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} occurence(s)</b><br/>'
 		        },
 		        legend: {
 		            align: 'right',
@@ -43,7 +43,8 @@ var chartService = [
 		        series: [{
 		            name: 'Emotion count',
 		            data: emap,
-		            pointPlacement: 'on'
+		            pointPlacement: 'on',
+		            color: '#BF0B23'
 		        }]
 
 		    });
@@ -156,6 +157,24 @@ var chartService = [
 		        },
 
 		        series: [{
+		            name: 'happy',
+		            data: series.happy,
+		            marker: {
+		                symbol: happy
+		            }
+		        }, {
+		            name: 'surprised',
+		            data: series.surprised,
+		            marker: {
+		                symbol: surprised
+		            }
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral,
+		            marker: {
+		                symbol: neutral
+		            }
+		        }, {
 		            name: 'angry',
 		            data: series.angry,
 		            marker: {
@@ -166,24 +185,6 @@ var chartService = [
 		            data: series.sad,
 		            marker: {
 		                symbol: sad
-		            }
-		        }, {
-		            name: 'neutral',
-		            data: series.neutral,
-		            marker: {
-		                symbol: neutral
-		            }
-		        }, {
-		            name: 'surprised',
-		            data: series.surprised,
-		            marker: {
-		                symbol: surprised
-		            }
-		        }, {
-		            name: 'happy',
-		            data: series.happy,
-		            marker: {
-		                symbol: happy
 		            }
 		        }]
 		    });
