@@ -1,6 +1,6 @@
 var chartService = [
 	function () {
-		var emotions = ["neutral", "happy", "sad", "surprised", "angry"],
+		var emotions = ["Neutral", "Happy", "Sad", "Surprised", "Angry"],
 			happy = 'url(/image/happy.png)',
 			sad = 'url(/image/sad.png)',
 			angry = 'url(/image/angry.png)',
@@ -56,11 +56,12 @@ var chartService = [
 				happy: [], 
 				sad: [], 
 				surprised: []
-			}, emotion, index, emoidx;
+			}, emotion, index, emoidx,  maxX, minX, ts;
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name;
 				emoidx = emotions.indexOf(emotion);
-				series[emotion].push([data[index].ts, emoidx]);
+				ts = data[index].ts;
+				series[emotion.toLowerCase()].push([ts, emoidx]);
 			}
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
@@ -126,10 +127,11 @@ var chartService = [
 				happy: [], 
 				sad: [], 
 				surprised: []
-			}, emotion, index, emoidx;
+			}, emotion, index, emoidx, maxX, minX, ts;
 			for (index=0;index<data.length;++index) {
-				emotion = data[index].name;
-				series[emotion].push([data[index].ts, 1]);
+				emotion = data[index].name.toLowerCase();
+				ts = data[index].ts;
+				series[emotion].push([ts, 1]);
 			}
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
