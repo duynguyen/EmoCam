@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     //kinds of emotion to append
     int numEmo = 5;
-    string emotion[5] = {"neutral", "happy", "sad", "surprising", "angry"};
+    string emotion[5] = {"neutral", "happy", "sad", "angry"};
 
     //path to load the model
     string faceCascadeFilename = path + "model/haarcascade_frontalface_alt.xml";  // Haar face detector.
