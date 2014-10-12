@@ -25,15 +25,25 @@ var dataService = [
 				emNote = $(content)[1],
 				divs = $(emNote).find("div"),
 				index = 0, emotion;
-			$.each(divs, function(index, value) {
-				var parts = $(value).text().split(" "),
-					ts = parseStringToTS(parts[0])
-					emotion = parts[1];
-				data.push({
-					ts: ts,
-					name: emotion
-				});
-			});
+			// $.each(divs, function(index, value) {
+			// 	var parts = $(value).text().split(" "),
+			// 		ts = parseStringToTS(parts[0])
+			// 		emotion = parts[1];
+			// 	data.push({
+			// 		ts: ts,
+			// 		name: emotion
+			// 	});
+			// });
+			var from = 0, to = 500;
+			for (var index=from;index<to;index++) {
+				if (Math.random() < 0.2) {
+					var em = parseInt(Math.random() * 4);
+					data.push({
+						ts: index,
+						name: em
+					});
+				}
+			}
 			return data;
 		}
 
