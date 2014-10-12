@@ -72,7 +72,7 @@ module.exports = function(app, VidNote) {
   app.post('/evernote', function(req, res) {
     var client = new Evernote.Client({token: developerToken});
     var noteStore = client.getNoteStore();
-    var noteContent = parser.parseArrayToNote(req.body.content);  // set the nerd's name (comes from the request)
+    var noteContent = parser.parseArrayToNote(parser.interpretRawData(JSON.parse(req.body.content)));  // set the nerd's name (comes from the request)
     var newNote = new Evernote.Note;
     newNote.title = req.body.title;
     newNote.content = noteContent;
