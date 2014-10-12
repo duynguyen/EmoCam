@@ -83,7 +83,7 @@ module.exports = function(app, VidNote) {
       fs.rename(req.files.noteVideo.path, "public/uploads/" + newNoteCreated.guid + "." + req.files.noteVideo.extension, function (err) {
         if (err) throw err;
       });
-      res.json(newNoteCreated);
+      res.json({url: "http://172.27.13.221:8080/#?guid=" + newNoteCreated.guid});
     });
   });
 
