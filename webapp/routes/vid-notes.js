@@ -1,5 +1,7 @@
 var Evernote = require('evernote').Evernote;
 var parser = require('./parser');
+var fs = require('fs');
+var multer  = require('multer');
 
 var config = require('../config-evernote.json');
 var callbackUrl = "http://localhost:8080/evernote/oauth_callback";
@@ -13,6 +15,8 @@ module.exports = function(app, VidNote) {
     console.log('Something is happening.');
     next(); // make sure we go to the next routes and don't stop here
   });
+
+  app.use(multer({ dest: './public/uploads/' }));
 
   // server routes ===========================================================
   // handle things like api calls
@@ -68,7 +72,7 @@ module.exports = function(app, VidNote) {
   app.post('/evernote', function(req, res) {
     var client = new Evernote.Client({token: developerToken});
     var noteStore = client.getNoteStore();
-    var noteContent = parser.parseArrayToNote(JSON.parse(req.body.content));  // set the nerd's name (comes from the request)
+    var noteContent = parser.parseArrayToNote(req.body.content);  // set the nerd's name (comes from the request)
     var newNote = new Evernote.Note;
     newNote.title = req.body.title;
     newNote.content = noteContent;
@@ -80,12 +84,9 @@ module.exports = function(app, VidNote) {
       var dval = "true";
       // noteStore.setNoteApplicationDataEntry(newNoteCreated.guid, dkey, dval);
       // newNoteCreated = noteStore.updateNote(newNoteCreated);
-      // fs.readFile(req.files.noteVideo.path, function (err, data) {
-      //   var newPath = __dirname + "/public/uploads/" + newNoteCreated.guid;
-      //   fs.writeFile(newPath, data, function (err) {
-      //     res.json({message: "Can not handle uploaded file."});
-      //   });
-      // });
+      fs.rename(req.files.noteVideo.path, "public/uploads/" + newNoteCreated.guid, function (err) {
+        if (err) throw err;
+      });
       res.json(newNoteCreated);
     });
   });
