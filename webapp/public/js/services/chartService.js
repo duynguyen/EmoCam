@@ -1,6 +1,6 @@
 var chartService = [
 	function () {
-		var emotions = ["neutral", "happy", "sad", "surprised", "angry"],
+		var emotions = ["Neutral", "Happy", "Sad", "Surprised", "Angry"],
 			happy = 'url(/image/happy.png)',
 			sad = 'url(/image/sad.png)',
 			angry = 'url(/image/angry.png)',
@@ -19,7 +19,7 @@ var chartService = [
 		            text: 'Emotion Polar Chart',
 		            x: -80
 		        },
-		        pane: { size: '80%' },
+		        pane: { size: '100%' },
 		        xAxis: {
 		            categories: emotions,
 		            tickmarkPlacement: 'on',
@@ -32,7 +32,7 @@ var chartService = [
 		        },
 		        tooltip: {
 		            shared: true,
-		            pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
+		            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f} occurence(s)</b><br/>'
 		        },
 		        legend: {
 		            align: 'right',
@@ -43,7 +43,8 @@ var chartService = [
 		        series: [{
 		            name: 'Emotion count',
 		            data: emap,
-		            pointPlacement: 'on'
+		            pointPlacement: 'on',
+		            color: '#BF0B23'
 		        }]
 
 		    });
@@ -56,17 +57,28 @@ var chartService = [
 				happy: [], 
 				sad: [], 
 				surprised: []
-			}, emotion, index, emoidx;
+			}, emotion, index, emoidx,  maxX, minX, ts;
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name;
 				emoidx = emotions.indexOf(emotion);
-				series[emotion].push([data[index].ts, emoidx]);
+				ts = data[index].ts;
+				series[emotion.toLowerCase()].push([ts, emoidx]);
+				if (!minX || ts < minX) {
+					minX = ts;
+				}
+				if (!maxX || ts > maxX) {
+					maxX = ts;
+				}
 			}
+			minX = minX < 50 ? 0 : minX - 50;
+			maxX += 50;
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
 		        subtitle: { text: 'How each emotion changes with time' },
 		        xAxis: {
+		        	min: minX,
+		        	max: maxX,
 		            type: 'linear',
 		            title: { text: 'Timestamp' }
 		        },
@@ -126,16 +138,27 @@ var chartService = [
 				happy: [], 
 				sad: [], 
 				surprised: []
-			}, emotion, index, emoidx;
+			}, emotion, index, emoidx, minX, maxX, ts;
 			for (index=0;index<data.length;++index) {
-				emotion = data[index].name;
-				series[emotion].push([data[index].ts, 1]);
+				emotion = data[index].name.toLowerCase();
+				ts = data[index].ts;
+				series[emotion].push([ts, 1]);
+				if (!minX || ts < minX) {
+					minX = ts;
+				}
+				if (!maxX || ts > maxX) {
+					maxX = ts;
+				}
 			}
+			minX = minX < 50 ? 0 : minX - 50;
+			maxX += 50;
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
 		        subtitle: { text: 'How all emotions change with time' },
 		        xAxis: {
+		        	min: minX,
+		        	max: maxX,
 		            type: 'linear',
 		            title: { text: 'Timestamp' }
 		        },
@@ -146,7 +169,11 @@ var chartService = [
 		            gridLineWidth: 0,
 		            title: {
 		            	text: "Emotion"
-		            }
+		            }, 
+		            labels: {
+		            	enabled: false
+		            },
+		            minorTickInterval: null
 		        },
 		        tooltip: {
 		            headerFormat: '<b>{series.name}</b><br>',
@@ -154,6 +181,24 @@ var chartService = [
 		        },
 
 		        series: [{
+		            name: 'happy',
+		            data: series.happy,
+		            marker: {
+		                symbol: happy
+		            }
+		        }, {
+		            name: 'surprised',
+		            data: series.surprised,
+		            marker: {
+		                symbol: surprised
+		            }
+		        }, {
+		            name: 'neutral',
+		            data: series.neutral,
+		            marker: {
+		                symbol: neutral
+		            }
+		        }, {
 		            name: 'angry',
 		            data: series.angry,
 		            marker: {
@@ -164,24 +209,6 @@ var chartService = [
 		            data: series.sad,
 		            marker: {
 		                symbol: sad
-		            }
-		        }, {
-		            name: 'neutral',
-		            data: series.neutral,
-		            marker: {
-		                symbol: neutral
-		            }
-		        }, {
-		            name: 'surprised',
-		            data: series.surprised,
-		            marker: {
-		                symbol: surprised
-		            }
-		        }, {
-		            name: 'happy',
-		            data: series.happy,
-		            marker: {
-		                symbol: happy
 		            }
 		        }]
 		    });
