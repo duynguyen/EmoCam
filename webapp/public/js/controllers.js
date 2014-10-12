@@ -3,7 +3,7 @@ myControllers.factory("dataService", dataService);
 myControllers.factory("chartService", chartService);
 myControllers.factory("restService", restService);
 myControllers.controller("bodyController", [
-	"$scope", "restService", function($scope, restService) {
+	"$scope", "$location", "restService", function($scope, $location, restService) {
 		$scope.notes = [];
 		
 		restService.getNoteMetadata(function(data) {
@@ -14,9 +14,12 @@ myControllers.controller("bodyController", [
 			$scope.$digest();
 			$(document).ready(function () {
 				var element = $("#noteVis .dropdown-menu > li > a").get(0),
-					noteItem = $(".note-list-item").get(0);
+					noteItem = $(".note-list-item").get(0),
+					noteGuid = $location.search()["guid"];
+				if (!noteGuid) {
+					$(noteItem).addClass("active");
+				}
 				$(element).trigger("click");
-				$(noteItem).addClass("active");
 			});
 		});
 	}
@@ -26,11 +29,12 @@ myControllers.controller("bodyController", [
 			$scope.$parent.$broadcast("show-note", note);
 		};
 	}
-]).controller("noteVisController", ["$scope", "chartService", "restService", "dataService", 
-	function ($scope, chartService, restService, dataService) {
+]).controller("noteVisController", ["$scope", "$location", "chartService", "restService", "dataService", 
+	function ($scope, $location, chartService, restService, dataService) {
 		$scope.chartType = -1;
 		$scope.noteContent = null;
-		$scope.noteGuid = null;
+		$scope.noteGuid = $location.search()["guid"];
+		console.log($scope.noteGuid);
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
@@ -39,8 +43,8 @@ myControllers.controller("bodyController", [
 			var noteListItem = $(".note-list-item");
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
-			$scope.noteGuid = note.guid;
 			$("#vid-src").attr("src", "http://172.27.13.221:8080/uploads/" + note.guid + ".MOV");
+			console.log(note.guid);
 			getNoteContentAndDraw($scope.chartType,note.guid);
 		}
 
@@ -68,7 +72,7 @@ myControllers.controller("bodyController", [
 		}
 
 		$scope.showChart = function(chartType) {
-			var noteGuid = getNoteGUID();
+			var noteGuid = $scope.noteGuid || getNoteGUID();
 			$("#vid-src").attr("src", "http://172.27.13.221:8080/uploads/" + noteGuid + ".MOV");
 			$scope.chartType = chartType;
 			getNoteContentAndDraw($scope.chartType, noteGuid);
