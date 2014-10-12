@@ -63,12 +63,22 @@ var chartService = [
 				emoidx = emotions.indexOf(emotion);
 				ts = data[index].ts;
 				series[emotion.toLowerCase()].push([ts, emoidx]);
+				if (!minX || ts < minX) {
+					minX = ts;
+				}
+				if (!maxX || ts > maxX) {
+					maxX = ts;
+				}
 			}
+			minX = minX < 50 ? 0 : minX - 50;
+			maxX += 50;
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
 		        subtitle: { text: 'How each emotion changes with time' },
 		        xAxis: {
+		        	min: minX,
+		        	max: maxX,
 		            type: 'linear',
 		            title: { text: 'Timestamp' }
 		        },
@@ -128,17 +138,27 @@ var chartService = [
 				happy: [], 
 				sad: [], 
 				surprised: []
-			}, emotion, index, emoidx, maxX, minX, ts;
+			}, emotion, index, emoidx, minX, maxX, ts;
 			for (index=0;index<data.length;++index) {
 				emotion = data[index].name.toLowerCase();
 				ts = data[index].ts;
 				series[emotion].push([ts, 1]);
+				if (!minX || ts < minX) {
+					minX = ts;
+				}
+				if (!maxX || ts > maxX) {
+					maxX = ts;
+				}
 			}
+			minX = minX < 50 ? 0 : minX - 50;
+			maxX += 50;
 			$('#chartContainer').highcharts({
 	        	chart: { type: 'scatter' },
 		        title: { text: 'Emotion timeline' },
 		        subtitle: { text: 'How all emotions change with time' },
 		        xAxis: {
+		        	min: minX,
+		        	max: maxX,
 		            type: 'linear',
 		            title: { text: 'Timestamp' }
 		        },
@@ -149,7 +169,11 @@ var chartService = [
 		            gridLineWidth: 0,
 		            title: {
 		            	text: "Emotion"
-		            }
+		            }, 
+		            labels: {
+		            	enabled: false
+		            },
+		            minorTickInterval: null
 		        },
 		        tooltip: {
 		            headerFormat: '<b>{series.name}</b><br>',

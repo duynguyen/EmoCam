@@ -3,12 +3,12 @@ var dataService = [
 		var emotions = ["Neutral", "Happy", "Sad", "Surprised", "Angry"];
 
 		var mockedContent = parseArrayToNote([
-			{timestamp: "00:01:00", status: "Happy"},
-			{timestamp: "00:02:00", status: "Sad"},
-			{timestamp: "00:03:00", status: "Neutral"},
-			{timestamp: "00:04:30", status: "Angry"},
-			{timestamp: "00:06:30", status: "Surprised"},
-			{timestamp: "00:07:30", status: "Happy"}
+			{timestamp: "01:00", status: "Happy"},
+			{timestamp: "02:00", status: "Sad"},
+			{timestamp: "03:00", status: "Neutral"},
+			{timestamp: "04:30", status: "Angry"},
+			{timestamp: "06:30", status: "Surprised"},
+			{timestamp: "07:30", status: "Happy"}
 		]);
 
 		function parseArrayToNote(data) {
@@ -24,10 +24,9 @@ var dataService = [
 
 		function parseStringToTS(str) {
 			var parts = str.split(":"),
-				hour = parseInt(parts[0]),
-				min = parseInt(parts[1]),
-				sec = parseInt(parts[2]),
-				ts = sec + min * 60 + hour * 3600;
+				min = parseInt(parts[0]),
+				sec = parseInt(parts[1]),
+				ts = sec + min * 60;
 			return ts;
 		}
 
