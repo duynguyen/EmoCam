@@ -72,19 +72,15 @@ module.exports = function(app, VidNote) {
   app.post('/evernote', function(req, res) {
     var client = new Evernote.Client({token: developerToken});
     var noteStore = client.getNoteStore();
-    var noteContent = parser.parseArrayToNote(parser.interpretRawData(JSON.parse(req.body.content)));  // set the nerd's name (comes from the request)
     var newNote = new Evernote.Note;
     newNote.title = req.body.title;
+    var noteContent = parser.parseArrayToNote(parser.interpretRawData(JSON.parse(req.body.content)));
     newNote.content = noteContent;
     noteStore.createNote(newNote, function(err, newNoteCreated) {
       if(err) {
         res.json({message : err});
       }
-      var dkey = "visable";
-      var dval = "true";
-      // noteStore.setNoteApplicationDataEntry(newNoteCreated.guid, dkey, dval);
-      // newNoteCreated = noteStore.updateNote(newNoteCreated);
-      fs.rename(req.files.noteVideo.path, "public/uploads/" + newNoteCreated.guid, function (err) {
+      fs.rename(req.files.noteVideo.path, "public/uploads/" + newNoteCreated.guid + "." + req.files.noteVideo.extension, function (err) {
         if (err) throw err;
       });
       res.json(newNoteCreated);
