@@ -30,6 +30,7 @@ myControllers.controller("bodyController", [
 	function ($scope, chartService, restService, dataService) {
 		$scope.chartType = -1;
 		$scope.noteContent = null;
+		$scope.noteGuid = null;
 		$scope.$on("show-note", function(event, data) {
 			displayNote(data);
 		});
@@ -38,6 +39,8 @@ myControllers.controller("bodyController", [
 			var noteListItem = $(".note-list-item");
 			noteListItem.removeClass("active");
 			$(noteListItem.get(note.id)).addClass("active");
+			$scope.noteGuid = note.guid;
+			$("#vid-src").attr("src", "http://172.27.13.221:8080/uploads/" + note.guid + ".MOV");
 			getNoteContentAndDraw($scope.chartType,note.guid);
 		}
 
@@ -52,6 +55,7 @@ myControllers.controller("bodyController", [
 					noteGuid = $scope.$parent.notes[index].guid;
 				}
 			});
+			$scope.noteGuid = noteGuid;
 			return noteGuid; // TODO to be replaced with concrete Id
 		}
 
@@ -65,6 +69,7 @@ myControllers.controller("bodyController", [
 
 		$scope.showChart = function(chartType) {
 			var noteGuid = getNoteGUID();
+			$("#vid-src").attr("src", "http://172.27.13.221:8080/uploads/" + noteGuid + ".MOV");
 			$scope.chartType = chartType;
 			getNoteContentAndDraw($scope.chartType, noteGuid);
 		};
